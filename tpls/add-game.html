@@ -1,37 +1,56 @@
-
+<p class="text-success text-center" ng-show="success">A new game has just added into game list.</p>
 
 <form class="form-horizontal" name="addgameform">
-  <div class="form-group col-sm-6">
+  <div class="form-group col-sm-6 has-feedback" check-validity>
     <label for="game-name" class="col-sm-3 control-label">Game Name<sup>*</sup></label>
     <div class="col-sm-9">
-      <input type="text" class="form-control" id="game-name" placeholder="Game Name" required ng-trim="true" ng-model="name">
+      <input type="text" class="form-control" id="game-name" placeholder="Game Name" required ng-model="name" name="gamename">
+      <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
     </div>
   </div>
-  <div class="form-group col-sm-6">
+  <div class="form-group col-sm-6 has-feedback" check-validity>
     <label for="game-price" class="col-sm-3 control-label">Price<sup>*</sup></label>
     <div class="col-sm-9 input-group">
       <span class="input-group-addon">$</span>
-      <input type="text" class="form-control" id="game-price" placeholder="Formate:52 , 52.3 or 52.35" required ng-pattern="/^((\d)+|(\d)+(\.)?(\d){1,2})$/" ng-model="price">
+      <input type="text" class="form-control" id="game-price" placeholder="format:52 , 52.3 or 52.35" required ng-pattern="/^((\d)+|(\d)+(\.)?(\d){1,2})$/" ng-model="price" name="price">
+      <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
     </div>
   </div>
-	<div class="form-group col-sm-6">
-    <label for="game-name" class="col-sm-3 control-label">Year<sup>*</sup></label>
+	<div class="form-group col-sm-6 has-feedback" check-validity>
+    <label for="game-year" class="col-sm-3 control-label">Year<sup>*</sup></label>
     <div class="col-sm-9">
-      <input type="text" class="form-control" id="game-name" placeholder="Game Name" required ng-trim="true" ng-model="name">
+      <input type="text" class="form-control" id="game-year" placeholder="format: YYYY" required ng-pattern="/^(\d){4}$/" ng-model="year" name="year">
+      <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
     </div>
   </div>
-  <div class="form-group col-sm-6">
+  <div class="form-group col-sm-6" hidden-field gametype="gameType">
     <label for="game-name" class="col-sm-3 control-label">Type<sup>*</sup></label>
     <div class="col-sm-9">
-      <input type="text" class="form-control" id="game-name" placeholder="Game Name" required ng-trim="true" ng-model="name">
+      <select class="form-control" ng-model="gameType" ng-options="gameType for gameType in gameTypes" required>
+        <option value="">-- Select type --</option>
+
+      </select>
+
+    </div>
+    <other></other>
+  </div>
+  <div class="row">
+    <div class="form-group col-sm-6">
+      <div class="col-sm-offset-3 col-sm-9">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" ng-model="multiPlayer"> Multi Players
+          </label>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="form-group col-sm-6">
-    <label for="game-name" class="col-sm-3 control-label">Multi players<sup>*</sup></label>
-    <div class="col-sm-9">
-      <input type="text" class="form-control" id="game-name" placeholder="Game Name" required ng-trim="true" ng-model="name">
+  <div class="row">
+    <div class="form-group col-sm-6">
+      <div class="col-sm-offset-3 col-sm-9">
+        <button type="button" class="btn btn-default" ng-click="addNewGame()">Add</button>
+      </div>
     </div>
   </div>
   <tt>{{addgameform.$valid}}</tt>
 </form>
-

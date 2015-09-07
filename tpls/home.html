@@ -5,27 +5,37 @@
 			<li class="list-group-item game-list-item" ng-click="unsetType()">All</li>
 			<li ng-repeat="gameType in gameTypes" class="list-group-item game-list-item" ng-click="setType(gameType)">{{gameType}}</li>
 		</ul>
-		<a class="btn btn-primary pull-right" href="#/add">New Game</a>
+		<a class="btn btn-default pull-right" href="#/add/{{ games[games.length - 1].id + 1 }}">New Game</a>
 	</div>
 	<div class="col-md-9">
-		<table class="table table-striped table-hover">
-			<tr>
-				<th>#</th>
-				<th ng-click="sortBy('name')" class="sort-trigger-button">Name</th>
-				<th ng-click="sortBy('type')" class="sort-trigger-button">Type</th>
-				<th ng-click="sortBy('price')" class="sort-trigger-button">Price</th>
-				<th ng-click="sortBy('year')" class="sort-trigger-button">Year</th>
-				<th ng-click="sortBy('multiplayer')" class="sort-trigger-button">Multi players</th>
-			</tr>
-			<tr ng-repeat="game in games">
-				<td>{{$index+1}}</td>
-				<td>{{game.name}}</td>
-				<td>{{game.type}}</td>
-				<td>{{game.price | currency}}</td>
-				<td>{{game.year}}</td>
-				<td>{{game.multiplayer | yesNo}}</td>
-			</tr>
-		</table>
+		<div class="panel panel-default">
+		  <!-- Default panel contents -->
+		  <div class="panel-heading">
+		  		<p class="pull-left">Game List</p>
+				<p class="pull-right">Search: <input type="text" ng-model="searchText"></p>
 
+		  </div>
+
+			<table class="table table-striped table-hover">
+				<tr>
+					<th>#</th>
+					<th ng-click="sortBy('name')" class="sort-trigger-button">Name</th>
+					<th ng-click="sortBy('type')" class="sort-trigger-button">Type</th>
+					<th ng-click="sortBy('price')" class="sort-trigger-button">Price</th>
+					<th ng-click="sortBy('year')" class="sort-trigger-button">Year</th>
+					<th ng-click="sortBy('multiplayer')" class="sort-trigger-button">Multi Players</th>
+					<th></th>
+				</tr>
+				<tr ng-repeat="game in games | filter: searchText" ng-mouseenter="visibleClass[$index] = 'show-icon'" ng-mouseleave="visibleClass[$index] = 'hide-icon'">
+					<td>{{$index+1}}</td>
+					<td>{{game.name}}</td>
+					<td>{{game.type}}</td>
+					<td>{{game.price | currency}}</td>
+					<td>{{game.year}}</td>
+					<td>{{game.multiplayer | yesNo}}</td>
+					<td><a class="glyphicon glyphicon-pencil hide-icon-init {{visibleClass[$index]}}" title="Edit" href="#/edit/{{game.id}}"></a> <a class="glyphicon glyphicon-remove hide-icon-init {{visibleClass[$index]}}" title="Delete" ng-click="deleteGame(game.id)" data-toggle="modal" data-target="#myModal"></a></td>
+				</tr>
+			</table>
+		</div>
 	</div>
 </div>

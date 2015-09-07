@@ -1,3 +1,42 @@
+a{
+	text-decoration: none !important;
+}
+
 .game-list-item, .sort-trigger-button{
 	cursor: pointer;
+}
+
+.form-horizontal .control-label{
+	text-align: left;
+}
+
+.panel-heading{
+	overflow: hidden;
+}
+
+.hide-icon-init{
+	visibility: hidden;
+	cursor: pointer;
+}
+
+.show-icon{
+	visibility: visible !important;
+}
+
+.hide-icon{
+	visibility: hidden !important;
+}
+
+@media screen and (max-width: 991px){
+	.hide-icon-init{
+		visibility: visible;
+	}
+
+	.show-icon{
+		visibility: visible !important;
+	}
+
+	.hide-icon{
+		visibility: visible !important;
+	}
 }
