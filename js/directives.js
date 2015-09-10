@@ -5,67 +5,106 @@ myDirectives.directive('checkValidity',function(){
     return {
       restrict: 'A',
       require:  '^form',
-      link: function (scope, el, attrs, formCtrl) {
-        // find the text box element, which has the 'name' attribute
-        var inputEl   = el[0].querySelector("[name]");
+      link: function (scope, elm, attrs, formCtrl) {
 
-        //get icon element
-        var icon = el[0].querySelector('.glyphicon');
-        // convert the native text box element to an angular element
-        var inputNgEl = angular.element(inputEl);
-        var iconNgEl = angular.element(icon);
-        // get the name on the text box so we know the property to check
-        // on the form controller
-        var inputName = inputNgEl.attr('name');
+        var formId = attrs.checkValidity;
 
-        // only apply the has-error class after the user leaves the text box
-        inputNgEl.bind('blur', function() {
-          var invalid = formCtrl[inputName].$invalid;
-          el.toggleClass('has-error', invalid);
-          if(invalid){
-            iconNgEl.removeClass('glyphicon-ok').addClass('glyphicon-remove');
+        var formElm = document.querySelector(formId);
+
+
+        setValidator();
+
+        function setValidator(){
+          var formGroupElms = formElm.querySelectorAll(".form-group");
+          for (var i = formGroupElms.length - 1; i >= 0; i--) {
+
+            var inputElm = formGroupElms[i].querySelector('[name]');
+            var inputElmNg = angular.element(inputElm);
+
+            inputElmNg.bind('blur change', onDataModify(inputElm, formGroupElms[i]));
+          };
+
+          var elmNg = angular.element(elm[0]);
+          elmNg.bind('click', function(){
+            var formGroupElms = formElm.querySelectorAll(".form-group");
+            for (var i = formGroupElms.length - 1; i >= 0; i--) {
+              var inputElm = formGroupElms[i].querySelector('[name]');
+              Validation(inputElm, formGroupElms[i],formCtrl);
+
+            };
+
+          })
+        }
+
+        function onDataModify(inputElm, formGroupElm){
+          return function(){
+            Validation(inputElm, formGroupElm,formCtrl);
           }
-          else{
-            iconNgEl.removeClass('glyphicon-remove').addClass('glyphicon-ok');
-          }
-        })
+        }
       }
     }
 });
 
-myDirectives.directive('hiddenField',function(){
-  return {
-    restrict : 'A',
-    scope : {
-      gametype : '='
-    },
-    controller : function($scope){
-
-    },
-    link : function(scope, elm, attrs){
-
-      var elmNg = angular.element(elm[0]);
-
-      elmNg.bind('change', function(){
-        var hiddenField = elm[0].querySelector('#hidden-field');
-          hiddenFieldNg = angular.element(hiddenField);
-        if(scope.gametype == 'Other'){
-
-          hiddenFieldNg.removeClass('ng-hide');
-        }
-        else{
-          hiddenFieldNg.addClass('ng-hide');
-        }
-      })
-    }
-  }
-})
-
 myDirectives.directive('other', function(){
   return {
     restrict : 'E',
-    require : '^hidden-field',
-    template : '<input id="hidden-field" type="text" class="form-control ng-hide" placeholder="Game Type" required ng-model="gameType" name="type" ng-trim="true">',
+    replace: true,
+    templateUrl : 'tpls/dir/other.html'
 
   }
 })
+
+myDirectives.directive('hiddenFieldValidity',function(){
+    return {
+      restrict : 'A',
+      requrie : '^form',
+      scope : {
+        isappendhiddenfield : '='
+      },
+      link : function(scope, elm, attrs, formCtrl){
+
+        scope.$watch('isappendhiddenfield',function(){
+          if(scope.isappendhiddenfield === true){
+            var hiddenInput = elm[0].querySelector('[name]');
+            var hiddenInputNg = angular.element(hiddenInput);
+            hiddenInputNg.bind('blur',function(){
+              var icon = elm[0].querySelector('.glyphicon');
+
+              var formGroupElmNg = angular.element(elm[0]);
+              var iconNg = angular.element(icon);
+
+              var invalid = hiddenInput.value == '';
+              formGroupElmNg.toggleClass('has-error', invalid);
+              if(invalid){
+                iconNg.removeClass('glyphicon-ok').addClass('glyphicon-remove');
+              }
+              else{
+                iconNg.removeClass('glyphicon-remove').addClass('glyphicon-ok');
+              }
+            })
+          }
+        })
+
+      }
+    }
+})
+
+function Validation(inputElm, formGroupElm,formCtrl){
+
+  var icon = formGroupElm.querySelector('.glyphicon');
+
+  var formGroupElmNg = angular.element(formGroupElm);
+  var inputElmsNg = angular.element(inputElm);
+  var iconNg = angular.element(icon);
+
+  var inputName = inputElmsNg.attr('name');
+
+  var invalid = formCtrl[inputName].$invalid;
+  formGroupElmNg.toggleClass('has-error', invalid);
+  if(invalid){
+    iconNg.removeClass('glyphicon-ok').addClass('glyphicon-remove');
+  }
+  else{
+    iconNg.removeClass('glyphicon-remove').addClass('glyphicon-ok');
+  }
+}

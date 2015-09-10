@@ -2,10 +2,10 @@
 	<div class="col-md-3">
 		<ul class="game-list list-group">
 
-			<li class="list-group-item game-list-item" ng-click="unsetType()">All</li>
-			<li ng-repeat="gameType in gameTypes" class="list-group-item game-list-item" ng-click="setType(gameType)">{{gameType}}</li>
+			<li class="list-group-item game-list-item" ng-click="stopFilter()">All</li>
+			<li ng-repeat="gameType in gameTypes" class="list-group-item game-list-item" ng-click="startFilter(gameType)">{{gameType}}</li>
 		</ul>
-		<a class="btn btn-default pull-right" href="#/add/{{ games[games.length - 1].id + 1 }}">New Game</a>
+		<a class="btn btn-default pull-right" href="#/add/{{ nextGameID }}">New Game</a>
 	</div>
 	<div class="col-md-9">
 		<div class="panel panel-default">
@@ -33,7 +33,7 @@
 					<td>{{game.price | currency}}</td>
 					<td>{{game.year}}</td>
 					<td>{{game.multiplayer | yesNo}}</td>
-					<td><a class="glyphicon glyphicon-pencil hide-icon-init {{visibleClass[$index]}}" title="Edit" href="#/edit/{{game.id}}"></a> <a class="glyphicon glyphicon-remove hide-icon-init {{visibleClass[$index]}}" title="Delete" ng-click="deleteGame(game.id)" data-toggle="modal" data-target="#myModal"></a></td>
+					<td><a class="glyphicon glyphicon-pencil hide-icon-init {{visibleClass[$index]}}" title="Edit" href="#/edit/{{game.id}}?name={{game.name}}&type={{game.type}}&price={{game.price}}&year={{game.year}}&multiplayer={{game.multiplayer}}"></a> <a class="glyphicon glyphicon-remove hide-icon-init {{visibleClass[$index]}}" title="Delete" ng-click="deleteGame(game.id)"></a></td>
 				</tr>
 			</table>
 		</div>

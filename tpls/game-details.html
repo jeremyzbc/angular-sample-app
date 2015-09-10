@@ -1,0 +1,79 @@
+<p class="text-success text-center" ng-show="success">Game info has been updated</p>
+
+<form class="form-horizontal" name="gamedetailform" id="game-detail-form">
+  <div class="row">
+    <div class="form-group col-sm-6 has-feedback">
+      <label for="game-name" class="col-sm-3 control-label">Game Name<sup>*</sup></label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" id="game-name" placeholder="Game Name" required ng-model="name" name="gamename" ng-blur="showMessage[0]=true">
+        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+        <div ng-messages="gamedetailform.gamename.$error" role="alert" ng-show="showMessage[0]" ng-init="showMessage[0]=false">
+          <div ng-message="required">You did not enter the field</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group col-sm-6 has-feedback">
+      <label for="game-price" class="col-sm-3 control-label">Price<sup>*</sup></label>
+      <div class="col-sm-9">
+
+        <input type="text" class="form-control" id="game-price" placeholder="format:52 , 52.3 or 52.35" required ng-pattern="/^((\d)+|(\d)+(\.)?(\d){1,2})$/" ng-model="price" name="price" ng-blur="showMessage[1]=true" ng-init="showMessage[1]=false">
+        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+        <div ng-messages="gamedetailform.price.$error" role="alert" ng-show="showMessage[1]">
+          <div ng-message="required">You did not enter the field</div>
+          <div ng-message="pattern">Please enter the correct format</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+  	<div class="form-group col-sm-6 has-feedback">
+      <label for="game-year" class="col-sm-3 control-label">Year<sup>*</sup></label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" id="game-year" placeholder="format: YYYY" required ng-pattern="/^(\d){4}$/" ng-model="year" name="year" ng-blur="showMessage[2]=true">
+        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+
+        <div ng-messages="gamedetailform.year.$error" role="alert" ng-show="showMessage[2]" ng-init="showMessage[2]=false">
+          <div ng-message="required">You did not enter the field</div>
+          <div ng-message="pattern">Please enter the correct format</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="form-group col-sm-6 has-feedback">
+      <label for="game-name" class="col-sm-3 control-label">Type<sup>*</sup></label>
+      <div class="col-sm-9">
+        <select class="form-control" ng-model="gameType" ng-options="gameType for gameType in gameTypes" required name="types" ng-blur="showMessage[3]=true" ng-change="change()">
+          <option value="">-- Select type --</option>
+
+        </select>
+
+        <div ng-messages="gamedetailform.types.$error" role="alert" ng-show="showMessage[3]" ng-init="showMessage[3]=false">
+          <div ng-message="required">You did not select the field</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="row">
+    <other></other>
+  </div>
+  <div class="row">
+    <div class="form-group col-sm-6">
+      <div class="col-sm-offset-3 col-sm-9">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" ng-model="multiPlayer" name="multiplayer"> Multi Players
+
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="col-sm-offset-3 col-sm-9">
+        <button type="button" class="btn btn-default" ng-click="ctrlAction()" id="submit-button" check-validity="#game-detail-form">Done</button>
+      </div>
+    </div>
+  </div>
+</form>

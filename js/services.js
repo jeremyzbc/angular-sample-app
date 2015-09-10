@@ -2,18 +2,8 @@ var myServices = angular.module('myServices',[]);
 myServices.factory('Services',['$http','$filter', '$rootScope', function($http, $filter, $rootScope){
 
 	return {
-		getGames : function(){
-			$http({
-				method : 'GET',
-				url : 'data/data.json'
-			}).then(function(res){
-				$rootScope.games = res.data;
-				$rootScope.$broadcast('dataReady');
-			},function(){
-				console.log('There is an error.');
-			});
-		},
 		getGamesTypes : function(){
+
 			var temp = new Array();
 			for (var i = $rootScope.games.length - 1; i >= 0; i--) {
 
@@ -23,15 +13,28 @@ myServices.factory('Services',['$http','$filter', '$rootScope', function($http, 
 			};
 			return temp;
 		},
-		startFilter : function(gameType){
-			this.typeForFilter = gameType;
-			$rootScope.$broadcast('startFilter');
-		},
-		stopFilter : function(){
-			$rootScope.$broadcast('stopFilter');
-		},
-		addNewGame : function(id, name, price, year, gameType, multiPlayer){
+    setNextGameId : function(){
 
+      $rootScope.nextGameID = $rootScope.games[$rootScope.games.length-1].id + 1;
+    },
+    verifyTypeName : function(typeName){
+      for (var i = $rootScope.gameTypes.length - 1; i >= 0; i--) {
+        if( $rootScope.gameTypes[i].toLowerCase() == typeName.toLowerCase() ){
+          return $rootScope.gameTypes[i];
+        }
+      };
+      return false;
+    },
+    addGameType : function(typeName){
+      $rootScope.gameTypes.push(typeName);
+    },
+    removeGameType : function(typeName){
+      var index = $rootScope.gameTypes.indexOf(typeName);
+      if (index > -1) {
+          $rootScope.gameTypes.splice(index, 1);
+      }
+    },
+		addNewGame : function(id, name, price, year, gameType, multiPlayer){
 			var newGame = {
 							"id" : id,
 							"name": name,
@@ -40,10 +43,37 @@ myServices.factory('Services',['$http','$filter', '$rootScope', function($http, 
 							"multiplayer":multiPlayer,
 							"price":price
 						};
+      ++$rootScope.nextGameID;
+      $rootScope.games.push(newGame);
+			$rootScope.$broadcast('addNewGameFinished');
 
-			$rootScope.$broadcast('addNewGameFinished',newGame);
+		},
+    removeGame : function(id){
+      for (var i = $rootScope.games.length - 1; i >= 0; i--) {
 
-		}
+        if( $rootScope.games[i].id == id){
+          //remove the game
+          $rootScope.games.splice(i, 1);
+        }
+      }
+      return $rootScope.games;
+    },
+    updateGame : function(id, name, price, year, gameType, multiPlayer){
+      var game = {
+        "id" : id,
+        "name": name,
+        "type":gameType,
+        "year":year,
+        "multiplayer":multiPlayer,
+        "price":price
+      };
+      for (var i = $rootScope.games.length - 1; i >= 0; i--) {
+        if( $rootScope.games[i].id == id ){
+          $rootScope.games[i] = game;
+        }
+      };
+      $rootScope.$broadcast('updateGameFinished');
+    }
 	}
 
 

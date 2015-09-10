@@ -1,0 +1,12 @@
+
+<div class="form-group col-sm-6 has-feedback row" id="hidden-field" ng-if="isAppendHiddenField" hidden-field-validity isappendhiddenfield="isAppendHiddenField">
+  <label for="game-year" class="col-sm-3 control-label">Name of Type<sup>*</sup></label>
+  <div class="col-sm-9">
+    <input type="text" class="form-control" placeholder="Game Type" required ng-model="$parent.gameTypeName" name="type" ng-trim="true" ng-blur="showMessage[4]=true">
+    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+    <div ng-messages="gamedetailform.type.$error" role="alert" ng-show="showMessage[4]" ng-init="showMessage[4]=false">
+      <div ng-message="required">You did not enter the field</div>
+    </div>
+  </div>
+
+</div>
